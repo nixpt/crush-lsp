@@ -30,4 +30,4 @@ tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 # Real Crush parser — powers actual syntax-error diagnostics (replaces the
 # stubbed CSS security-scanner client this was ported from, which always
 # returned an empty finding list).
-crush-frontend = { path = "../crush-ast/crates/crush-frontend", version = "0.3.0" }
+crush-frontend = { path = "../../crush-ast/crates/crush-frontend", version = "0.3.0" }
