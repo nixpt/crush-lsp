@@ -1,0 +1,33 @@
+[package]
+name = "crush-lsp"
+version = "0.1.0"
+edition = "2021"
+description = "Language Server Protocol implementation for Crush — real diagnostics via crush-frontend, LLM-backed hover/explain via pipefish."
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/nixpt/crush-lsp"
+readme = "README.md"
+
+[lib]
+name = "crush_lsp"
+path = "src/lib.rs"
+
+[[bin]]
+name = "crush-lsp"
+path = "src/main.rs"
+
+[dependencies]
+tokio = { version = "1", features = ["full"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+async-trait = "0.1"
+lsp-types = "0.94"
+tower-lsp = "0.20"
+reqwest = { version = "0.11", features = ["json"] }
+anyhow = "1"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# Real Crush parser — powers actual syntax-error diagnostics (replaces the
+# stubbed CSS security-scanner client this was ported from, which always
+# returned an empty finding list).
+crush-frontend = { path = "../crush-ast/crates/crush-frontend", version = "0.3.0" }
