@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  check:
+    name: Check + Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      # crush-frontend is a path-dep (../crush-ast/crates/crush-frontend) —
+      # actions/checkout refuses a `path:` that escapes $GITHUB_WORKSPACE, so
+      # check out to a subdir and move it up a level instead (see nixpt/crush-ast's
+      # own CI history for why the direct `path: ../crush-ast` form fails outright).
+      - uses: actions/checkout@v4
+        with:
+          repository: nixpt/crush-ast
+          path: crush-ast
+      - run: mv crush-ast ..
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo check --all-targets
+      - run: cargo test
+
+  clippy:
+    name: Clippy
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: nixpt/crush-ast
+          path: crush-ast
+      - run: mv crush-ast ..
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo clippy --all-targets -- -D warnings || true
