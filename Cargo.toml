@@ -6,6 +6,8 @@ description = "Language Server Protocol implementation for Crush — real diagno
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/nixpt/crush-lsp"
 readme = "README.md"
+# Don't ship the planning board or CI config in the published tarball.
+exclude = [".jagent/**", ".dejavue/**", ".github/**"]
 
 [lib]
 name = "crush_lsp"
