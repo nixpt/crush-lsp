@@ -1,0 +1,51 @@
+@caison { version: "1.0" }
+
+schema: "milestones/1"
+
+project: {
+  name: "crush-lsp"
+  kind: "repo"
+  lifecycle: "shipped" ~0.7 @verified { at: "2026-11-18", by: "altair" }
+  lifecycle_since: "2026-10-30"
+  home: "zorro"
+  ticket_prefix: "LSP"
+  summary: "the Crush language server (diagnostics, completions, LLM hover), 0.1.0 on crates.io built on published crush-frontend 0.8.0; two Backlog tickets, LSP-2 now unblocked (crush-ast CRUSH-74/79 Done)"
+  stewards: ["altair"]
+  evidence: {
+    default_branch: "main"
+    registries: [{ registry: "crates.io", name: "crush-lsp" }]
+  }
+}
+
+milestones: [
+  {
+    id: "L0"
+    title: "language server on published crates"
+    status: "done" @verified { at: "2026-11-18", by: "altair" }
+    done_at: "2026-10-30"
+    version: "v0.1.0"
+    done_when: [
+      { claim: "builds on published crush-frontend (PR #1)", check: { kind: "merged", pr: "1" } },
+      { claim: "v0.1.0 tagged", check: { kind: "tag", pattern: "v0.1.0" } },
+      { claim: "crush-lsp on crates.io", check: { kind: "published", registry: "crates.io", name: "crush-lsp" } },
+    ]
+  },
+  {
+    id: "L1"
+    title: "real source positions, pinned frontend facade"
+    status: "next" @verified { at: "2026-11-18", by: "altair" }
+    tickets: ["LSP-1", "LSP-2"]
+    done_when: [
+      { claim: "LSP-1 and LSP-2 closed", check: { kind: "tickets", status: "Done" } },
+      "diagnostics carry real source ranges from crush-ast spans",
+    ]
+    notes: "LSP-2's ticket says gated on crush-ast CRUSH-74/79; both are Done in crush-ast (checked 2026-11-18), so the gate is open. crush-frontend is 0.11.2 on crates.io; this crate still pins 0.8.0."
+  },
+  {
+    id: "L2"
+    title: "track the Crush 1.0 surface"
+    status: "planned" @verified { at: "2026-11-18", by: "altair" }
+    depends_on: ["crush-ast:FREEZE"]
+    done_when: ["built on the freeze-release crush-frontend; pub/visibility and reserved words reported"]
+  },
+]
